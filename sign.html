@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - TechZone</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .tab-btns { display:flex; gap:0; margin-bottom:2rem; border-radius:12px; overflow:hidden; border:1px solid var(--border); }
+    .tab-btn { flex:1; padding:14px; background:var(--bg3); border:none; color:var(--text-muted); font-family:var(--font-body); font-size:0.95rem; cursor:pointer; font-weight:600; transition:all 0.2s; }
+    .tab-btn.active { background:var(--accent); color:white; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .strength-bar { height:4px; border-radius:4px; margin-top:6px; background:var(--border); overflow:hidden; }
+    .strength-fill { height:100%; border-radius:4px; transition:width 0.3s, background 0.3s; width:0%; }
+    .pass-toggle { position:relative; }
+    .pass-toggle input { padding-right:45px; }
+    .pass-toggle .eye-btn { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem; }
+    .checkbox-row { display:flex; align-items:center; gap:10px; margin:1rem 0; }
+    .checkbox-row input { width:18px; height:18px; accent-color:var(--accent); cursor:pointer; }
+    .checkbox-row label { color:var(--text-muted); font-size:0.9rem; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo"><a href="index.html">TECH<span>ZONE</span></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="signup.html" class="active">Sign Up</a></li>
+    <li><a href="profile.html"><i class="fa fa-user"></i></a></li>
+    <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+
+<section class="auth-section">
+  <div class="auth-card">
+
+    <!-- TABS -->
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab('signup', this)">Create Account</button>
+      <button class="tab-btn" onclick="switchTab('login', this)">Log In</button>
+    </div>
+
+    <!-- SIGNUP TAB -->
+    <div class="tab-content active" id="tab-signup">
+      <h2>Join <span style="color:var(--accent)">TechZone</span></h2>
+      <p>Create your account and start shopping</p>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="su-name" placeholder="Your full name" oninput="clearErr('su-name-err')"/>
+        <div class="error-msg" id="su-name-err"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" id="su-email" placeholder="you@email.com" oninput="clearErr('su-email-err')"/>
+        <div class="error-msg" id="su-email-err"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" id="su-phone" placeholder="01xxxxxxxxx" oninput="clearErr('su-phone-err')"/>
+        <div class="error-msg" id="su-phone-err"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-toggle">
+          <input type="password" id="su-pass" placeholder="Min 8 characters" oninput="checkStrength(); clearErr('su-pass-err')"/>
+          <button class="eye-btn" onclick="togglePass('su-pass', this)" type="button"><i class="fa fa-eye"></i></button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px" id="strengthText"></div>
+        <div class="error-msg" id="su-pass-err"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="pass-toggle">
+          <input type="password" id="su-pass2" placeholder="Repeat password" oninput="clearErr('su-pass2-err')"/>
+          <button class="eye-btn" onclick="togglePass('su-pass2', this)" type="button"><i class="fa fa-eye"></i></button>
+        </div>
+        <div class="error-msg" id="su-pass2-err"></div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="su-terms"/>
+        <label for="su-terms">I agree to the <a href="#" style="color:var(--accent)">Terms & Conditions</a></label>
+      </div>
+      <div class="error-msg" id="su-terms-err"></div>
+
+      <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitSignup()">Create Account</button>
+
+      <div class="auth-links">Already have an account? <a href="#" onclick="switchTab('login', document.querySelectorAll('.tab-btn')[1])">Log In</a></div>
+    </div>
+
+    <!-- LOGIN TAB -->
+    <div class="tab-content" id="tab-login">
+      <h2>Welcome <span style="color:var(--accent)">Back</span></h2>
+      <p>Sign in to your TechZone account</p>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" id="li-email" placeholder="you@email.com" oninput="clearErr('li-email-err')"/>
+        <div class="error-msg" id="li-email-err"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-toggle">
+          <input type="password" id="li-pass" placeholder="Your password" oninput="clearErr('li-pass-err')"/>
+          <button class="eye-btn" onclick="togglePass('li-pass', this)" type="button"><i class="fa fa-eye"></i></button>
+        </div>
+        <div class="error-msg" id="li-pass-err"></div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;" onclick="submitLogin()">Log In</button>
+      <div class="auth-links">New here? <a href="#" onclick="switchTab('signup', document.querySelectorAll('.tab-btn')[0])">Create Account</a></div>
+    </div>
+
+  </div>
+</section>
+
+<script src="script.js"></script>
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  function showErr(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  function clearErr(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  }
+
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.innerHTML = '<i class="fa fa-eye-slash"></i>';
+    } else {
+      input.type = 'password';
+      btn.innerHTML = '<i class="fa fa-eye"></i>';
+    }
+  }
+
+  function checkStrength() {
+    const val = document.getElementById('su-pass').value;
+    const fill = document.getElementById('strengthFill');
+    const text = document.getElementById('strengthText');
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const colors = ['', '#e63946', '#f4a261', '#2a9d8f', '#4caf50'];
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    fill.style.width = (score * 25) + '%';
+    fill.style.background = colors[score];
+    text.textContent = val.length ? labels[score] : '';
+    text.style.color = colors[score];
+  }
+
+  // ---- CUSTOM JS VALIDATION (not HTML5) ----
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.trim());
+  }
+  function validatePhone(phone) {
+    const re = /^01[0-9]{9}$/;
+    return re.test(phone.trim());
+  }
+  function validatePassword(pass) {
+    return pass.length >= 8;
+  }
+
+  function submitSignup() {
+    let valid = true;
+    const name  = document.getElementById('su-name').value.trim();
+    const email = document.getElementById('su-email').value.trim();
+    const phone = document.getElementById('su-phone').value.trim();
+    const pass  = document.getElementById('su-pass').value;
+    const pass2 = document.getElementById('su-pass2').value;
+    const terms = document.getElementById('su-terms').checked;
+
+    if (name.length < 3) { showErr('su-name-err', '❌ Name must be at least 3 characters.'); valid = false; }
+    if (!validateEmail(email)) { showErr('su-email-err', '❌ Enter a valid email address.'); valid = false; }
+    if (!validatePhone(phone)) { showErr('su-phone-err', '❌ Enter a valid Egyptian phone number (01xxxxxxxxx).'); valid = false; }
+    if (!validatePassword(pass)) { showErr('su-pass-err', '❌ Password must be at least 8 characters.'); valid = false; }
+    if (pass !== pass2) { showErr('su-pass2-err', '❌ Passwords do not match.'); valid = false; }
+    if (!terms) { showErr('su-terms-err', '❌ You must accept the terms & conditions.'); valid = false; }
+
+    if (!valid) return;
+
+    // Save to localStorage (different storage: also save session flag)
+    const userData = { name, email, phone, joined: new Date().toLocaleDateString() };
+    localStorage.setItem('tz-user', JSON.stringify(userData));
+    sessionStorage.setItem('tz-logged-in', 'true');
+
+    showToast('🎉 Account created! Redirecting...');
+    setTimeout(() => window.location.href = 'profile.html', 1800);
+  }
+
+  function submitLogin() {
+    let valid = true;
+    const email = document.getElementById('li-email').value.trim();
+    const pass  = document.getElementById('li-pass').value;
+
+    if (!validateEmail(email)) { showErr('li-email-err', '❌ Enter a valid email address.'); valid = false; }
+    if (pass.length < 8) { showErr('li-pass-err', '❌ Password must be at least 8 characters.'); valid = false; }
+
+    if (!valid) return;
+
+    const saved = JSON.parse(localStorage.getItem('tz-user') || '{}');
+    if (saved.email && saved.email === email) {
+      sessionStorage.setItem('tz-logged-in', 'true');
+      showToast('✅ Logged in successfully!');
+      setTimeout(() => window.location.href = 'profile.html', 1500);
+    } else {
+      showErr('li-email-err', '❌ No account found with this email. Please sign up first.');
+    }
+  }
+</script>
+</body>
+</html>
