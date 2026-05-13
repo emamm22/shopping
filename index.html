@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TechZone - Premium Tech Store</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-logo">TECH<span>ZONE</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="signup.html">Sign Up</a></li>
+    <li><a href="profile.html"><i class="fa fa-user"></i></a></li>
+    <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-tag">New Arrivals 2026</p>
+    <h1>The Future<br/>Of <span>Tech</span><br/>Is Here.</h1>
+    <p class="hero-sub">Phones · Headphones · Smartwatches · AirPods</p>
+    <div class="hero-btns">
+      <a href="products.html" class="btn-primary">Shop Now</a>
+      <a href="#featured" class="btn-outline">Explore</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-circle"></div>
+    <div class="hero-phone">
+      <i class="fa fa-mobile-alt"></i>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stat"><h2>500+</h2><p>Products</p></div>
+  <div class="stat"><h2>10K+</h2><p>Customers</p></div>
+  <div class="stat"><h2>4.9★</h2><p>Rating</p></div>
+  <div class="stat"><h2>24/7</h2><p>Support</p></div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="featured">
+  <h2 class="section-title">Shop by <span>Category</span></h2>
+  <div class="cat-grid">
+    <a href="products.html?cat=phones" class="cat-card">
+      <i class="fa fa-mobile-alt"></i>
+      <h3>Phones</h3>
+      <p>Latest flagships</p>
+    </a>
+    <a href="products.html?cat=headphones" class="cat-card">
+      <i class="fa fa-headphones"></i>
+      <h3>Headphones</h3>
+      <p>Crystal clear sound</p>
+    </a>
+    <a href="products.html?cat=watches" class="cat-card">
+      <i class="fa fa-clock"></i>
+      <h3>Smartwatches</h3>
+      <p>Track your life</p>
+    </a>
+    <a href="products.html?cat=airpods" class="cat-card">
+      <i class="fa fa-podcast"></i>
+      <h3>AirPods</h3>
+      <p>Wireless freedom</p>
+    </a>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="featured-products">
+  <h2 class="section-title">Featured <span>Products</span></h2>
+  <div class="prod-grid" id="featuredGrid"></div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section class="video-section">
+  <h2 class="section-title">Watch Our <span>Story</span></h2>
+  <div class="video-wrapper">
+    <iframe width="800" height="400"
+      src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+      title="TechZone Story"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<!-- AUDIO PROMO -->
+<section class="audio-section">
+  <h2 class="section-title">🎵 Our <span>Promo</span></h2>
+  <p style="text-align:center; color:var(--text-muted); margin-bottom:1rem;">Experience the sound quality of our headphones</p>
+  <div style="text-align:center;">
+    <audio controls style="width:60%; border-radius:30px;">
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"/>
+      Your browser does not support audio.
+    </audio>
+  </div>
+</section>
+
+<!-- MAP IFRAME -->
+<section class="map-section">
+  <h2 class="section-title">Find <span>Us</span></h2>
+  <div class="map-wrapper">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.9!2d31.2357!3d30.0444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzM5LjkiTiAzMcKwMTQnMDkuNSJF!5e0!3m2!1sen!2seg!4v1234567890"
+      width="100%" height="350" style="border:0; border-radius:16px;" allowfullscreen loading="lazy">
+    </iframe>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">TECH<span>ZONE</span></div>
+    <p>© 2026 TechZone. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="contact.html">Contact</a>
+      <a href="signup.html">Sign Up</a>
+    </div>
+    <div class="social-icons">
+      <i class="fab fa-instagram"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-tiktok"></i>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // Render featured products
+  const featured = products.slice(0, 4);
+  const grid = document.getElementById('featuredGrid');
+  featured.forEach(p => {
+    grid.innerHTML += `
+      <div class="prod-card">
+        <div class="prod-icon"><i class="${p.icon}"></i></div>
+        <span class="prod-cat">${p.category}</span>
+        <h3>${p.name}</h3>
+        <p class="prod-price">${p.price} EGP</p>
+        <button class="btn-primary" onclick="addToCart(${p.id})">Add to Cart</button>
+      </div>`;
+  });
+</script>
+</body>
+</html>
