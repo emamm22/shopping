@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products - TechZone</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo"><a href="index.html">TECH<span>ZONE</span></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html" class="active">Products</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="signup.html">Sign Up</a></li>
+    <li><a href="profile.html"><i class="fa fa-user"></i></a></li>
+    <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> / Products</div>
+  <h1>All <span>Products</span></h1>
+  <p>Browse our full collection of premium tech gadgets</p>
+</div>
+
+<section class="products-page">
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()"/>
+    <button><i class="fa fa-search"></i></button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('All', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Phones', this)">📱 Phones</button>
+    <button class="filter-btn" onclick="setFilter('AirPods', this)">🎵 AirPods</button>
+    <button class="filter-btn" onclick="setFilter('Headphones', this)">🎧 Headphones</button>
+    <button class="filter-btn" onclick="setFilter('Watches', this)">⌚ Watches</button>
+  </div>
+
+  <!-- GRID -->
+  <div class="prod-grid" id="productGrid"></div>
+
+  <!-- COMPARE TABLE -->
+  <div style="margin-top: 5rem;">
+    <h2 class="section-title">Quick <span>Compare</span></h2>
+    <div style="overflow-x:auto;">
+      <table class="cart-table" style="margin:0 auto; max-width:900px;">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price (EGP)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="compareTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">TECH<span>ZONE</span></div>
+    <p>© 2026 TechZone. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-icons">
+      <i class="fab fa-instagram"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-facebook"></i>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  let currentFilter = 'All';
+
+  function setFilter(cat, btn) {
+    currentFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterProducts();
+  }
+
+  function filterProducts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = products.filter(p => {
+      const matchCat = currentFilter === 'All' || p.category === currentFilter;
+      const matchSearch = p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+      return matchCat && matchSearch;
+    });
+    renderGrid(filtered);
+  }
+
+  function renderGrid(list) {
+    const grid = document.getElementById('productGrid');
+    if (list.length === 0) {
+      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:3rem;">No products found.</p>';
+      return;
+    }
+    grid.innerHTML = list.map(p => `
+      <div class="prod-card">
+        <div class="prod-icon"><i class="${p.icon}"></i></div>
+        <span class="prod-cat">${p.category}</span>
+        <h3>${p.name}</h3>
+        <p class="prod-desc">${p.desc}</p>
+        <p class="prod-price">${p.price.toLocaleString()} EGP</p>
+        <button class="btn-primary" onclick="addToCart(${p.id}); recordView(${p.id})">Add to Cart</button>
+      </div>
+    `).join('');
+  }
+
+  // Compare table — top 4 featured
+  function renderCompare() {
+    const top = products.filter(p => [1,5,9,13].includes(p.id));
+    document.getElementById('compareTable').innerHTML = top.map(p => `
+      <tr>
+        <td><i class="${p.icon}" style="color:var(--accent);margin-right:8px"></i> ${p.name}</td>
+        <td>${p.category}</td>
+        <td style="color:var(--accent);font-weight:700">${p.price.toLocaleString()}</td>
+        <td><button class="btn-primary" style="padding:8px 16px;font-size:0.8rem" onclick="addToCart(${p.id})">Add</button></td>
+      </tr>
+    `).join('');
+  }
+
+  // Check URL param
+  const params = new URLSearchParams(window.location.search);
+  const catMap = { phones:'Phones', headphones:'Headphones', watches:'Watches', airpods:'AirPods' };
+  if (params.get('cat') && catMap[params.get('cat')]) {
+    currentFilter = catMap[params.get('cat')];
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      if (b.textContent.toLowerCase().includes(params.get('cat'))) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+  }
+
+  filterProducts();
+  renderCompare();
+</script>
+</body>
+</html>
