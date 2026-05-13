@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile - TechZone</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo"><a href="index.html">TECH<span>ZONE</span></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="signup.html">Sign Up</a></li>
+    <li><a href="profile.html" class="active"><i class="fa fa-user"></i></a></li>
+    <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> / Profile</div>
+  <h1>My <span>Profile</span></h1>
+  <p>Manage your account and preferences</p>
+</div>
+
+<section class="profile-section">
+
+  <!-- GUEST BANNER (shown when not logged in) -->
+  <div id="guestBanner" style="display:none; text-align:center; padding:3rem; background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:2rem;">
+    <i class="fa fa-user-circle" style="font-size:4rem;color:var(--text-muted);display:block;margin-bottom:1rem;"></i>
+    <h3 style="font-family:var(--font-display);font-size:1.8rem;margin-bottom:0.5rem;">You're not logged in</h3>
+    <p style="color:var(--text-muted);margin-bottom:1.5rem;">Create an account or log in to view your profile.</p>
+    <a href="signup.html" class="btn-primary">Sign Up / Log In</a>
+  </div>
+
+  <!-- PROFILE CONTENT -->
+  <div id="profileContent">
+    <!-- HEADER -->
+    <div class="profile-header">
+      <div class="profile-avatar" id="avatarLetter">?</div>
+      <div class="profile-info">
+        <h2 id="profileName">Guest User</h2>
+        <p id="profileEmail" style="color:var(--text-muted);">Not logged in</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">Member since: <span id="profileJoined">—</span></p>
+      </div>
+      <div style="margin-left:auto;">
+        <button class="btn-danger" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <h3 id="statOrders">0</h3>
+        <p>Orders</p>
+      </div>
+      <div class="profile-stat">
+        <h3 id="statCartItems">0</h3>
+        <p>Cart Items</p>
+      </div>
+      <div class="profile-stat">
+        <h3 id="statViews">0</h3>
+        <p>Viewed Products</p>
+      </div>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div class="profile-form">
+      <h3>Edit Profile</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="editName" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" id="editEmail" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" id="editPhone" placeholder="01xxxxxxxxx"/>
+      </div>
+      <div class="error-msg" id="editErr" style="margin-bottom:1rem;"></div>
+      <button class="btn-primary" onclick="saveProfile()"><i class="fa fa-save"></i> Save Changes</button>
+    </div>
+
+    <!-- RECENTLY VIEWED (sessionStorage) -->
+    <div style="margin-top:2rem; background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:2rem;">
+      <h3 style="font-family:var(--font-display); font-size:1.6rem; margin-bottom:1.5rem;">Recently <span style="color:var(--accent)">Viewed</span> <small style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-body)">(session)</small></h3>
+      <div id="recentViewed" style="display:flex;gap:1rem;flex-wrap:wrap;"></div>
+    </div>
+
+    <!-- ORDER HISTORY (localStorage) -->
+    <div style="margin-top:2rem; background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:2rem;">
+      <h3 style="font-family:var(--font-display); font-size:1.6rem; margin-bottom:1.5rem;">Order <span style="color:var(--accent)">History</span> <small style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-body)">(localStorage)</small></h3>
+      <div id="orderHistory"></div>
+    </div>
+  </div>
+
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">TECH<span>ZONE</span></div>
+    <p>© 2026 TechZone. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="products.html">Products</a><a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  function loadProfile() {
+    const user = JSON.parse(localStorage.getItem('tz-user') || '{}');
+    const loggedIn = sessionStorage.getItem('tz-logged-in') === 'true';
+
+    if (!user.name && !loggedIn) {
+      document.getElementById('guestBanner').style.display = 'block';
+      document.getElementById('profileContent').style.display = 'none';
+      return;
+    }
+
+    if (user.name) {
+      document.getElementById('profileName').textContent = user.name;
+      document.getElementById('avatarLetter').textContent = user.name.charAt(0).toUpperCase();
+      document.getElementById('profileEmail').textContent = user.email || '';
+      document.getElementById('profileJoined').textContent = user.joined || '—';
+      document.getElementById('editName').value = user.name;
+      document.getElementById('editEmail').value = user.email || '';
+      document.getElementById('editPhone').value = user.phone || '';
+    }
+
+    // Stats
+    const cart = getCart();
+    const recent = JSON.parse(sessionStorage.getItem('tz-recent') || '[]');
+    const orders = JSON.parse(localStorage.getItem('tz-orders') || '[]');
+    document.getElementById('statOrders').textContent = orders.length;
+    document.getElementById('statCartItems').textContent = cart.reduce((s,i)=>s+i.qty,0);
+    document.getElementById('statViews').textContent = recent.length;
+
+    // Recently viewed
+    const rv = document.getElementById('recentViewed');
+    if (recent.length === 0) {
+      rv.innerHTML = '<p style="color:var(--text-muted)">No products viewed this session.</p>';
+    } else {
+      rv.innerHTML = recent.map(id => {
+        const p = products.find(x => x.id === id);
+        if (!p) return '';
+        return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;min-width:150px;text-align:center;">
+          <i class="${p.icon}" style="color:var(--accent);font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
+          <p style="font-size:0.85rem;font-weight:600;">${p.name}</p>
+          <p style="font-size:0.75rem;color:var(--text-muted);">${p.price.toLocaleString()} EGP</p>
+        </div>`;
+      }).join('');
+    }
+
+    // Orders
+    const oh = document.getElementById('orderHistory');
+    if (orders.length === 0) {
+      oh.innerHTML = '<p style="color:var(--text-muted)">No orders yet. <a href="products.html" style="color:var(--accent)">Start shopping!</a></p>';
+    } else {
+      oh.innerHTML = orders.map(o => `
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+            <span style="font-weight:700;color:var(--accent)">Order #${o.id}</span>
+            <span style="color:var(--text-muted);font-size:0.85rem">${o.date}</span>
+            <span style="font-weight:700">${o.total.toLocaleString()} EGP</span>
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem">${o.items}</p>
+        </div>
+      `).join('');
+    }
+  }
+
+  function saveProfile() {
+    const name  = document.getElementById('editName').value.trim();
+    const email = document.getElementById('editEmail').value.trim();
+    const phone = document.getElementById('editPhone').value.trim();
+    const err   = document.getElementById('editErr');
+
+    if (name.length < 3) { err.textContent = '❌ Name must be at least 3 characters.'; err.style.display='block'; return; }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email)) { err.textContent = '❌ Enter a valid email.'; err.style.display='block'; return; }
+    err.style.display = 'none';
+
+    const existing = JSON.parse(localStorage.getItem('tz-user') || '{}');
+    const updated = { ...existing, name, email, phone };
+    localStorage.setItem('tz-user', JSON.stringify(updated));
+    showToast('✅ Profile saved!');
+    loadProfile();
+  }
+
+  function logout() {
+    sessionStorage.removeItem('tz-logged-in');
+    showToast('👋 Logged out!');
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  }
+
+  loadProfile();
+</script>
+</body>
+</html>
